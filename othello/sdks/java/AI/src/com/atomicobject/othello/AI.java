@@ -34,9 +34,9 @@ public class AI {
         bestMove = getBestPosition(moves);
 
         //for testing purposes
-        System.out.println("THIS IS THE BEST MOVE: " + bestMove);
+        System.out.println("TEST: this is the best move: " + bestMove);
 
-
+        //creating new board after our move
        int[][] newBoard = state.getBoard();
 
         if(playerOne){
