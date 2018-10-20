@@ -43,7 +43,7 @@ public class GameState {
 		builder.append("[");
 		for (int i = 0; i < board.length; i++) {
 			builder.append(Arrays.toString(board[i]));
-			if (i < board.length - 1) builder.append(",");
+			if (i < board.length - 1) builder.append(",\n");
 		}
 		builder.append("]");
 		builder.append(" maxTurnTime: ");
