@@ -24,6 +24,9 @@ public class AI {
         //AI
         ArrayList<Coordinate> moves = possibleMoves(state.getBoard());
 
+        assignValues(moves, state.getBoard());
+
+
         //TODO: Select best move for player (high/low)
         return moveList.next();
     }
@@ -35,7 +38,7 @@ public class AI {
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
 
-                //Checks to see if the spot is a
+                //Checks to see if the spot is a valid spot
                 if (board[i][j] == 1 && playerOne || board[i][j] == 2 && !playerOne) {
 
                     boolean nLeft = false, nRight = false, nTop = false, nBottom = false;
@@ -65,13 +68,13 @@ public class AI {
                     //Checks diagonal moves
                     if (nLeft && nTop && board[i - 1][j - 1] == 0)
                         moves.add(new Coordinate(i - 1, j - 1));
-                    
+
                     if (nLeft && nBottom && board[i - 1][j + 1] == 0)
                         moves.add(new Coordinate(i - 1, j + 1));
-                    
+
                     if (nRight && nTop && board[i + 1][j - 1] == 0)
                         moves.add(new Coordinate(i + 1, j - 1));
-                    
+
                     if (nRight && nBottom && board[i + 1][j + 1] == 0)
                         moves.add(new Coordinate(i + 1, j + 1));
                 }
@@ -80,6 +83,77 @@ public class AI {
 
         return moves;
     }
+
+
+    private int hasPerpandicular(int[] arry, int startValue, int direction, int player) {
+
+        int counter = 0;
+        boolean hasSame = false;
+        //if the direction is right or down
+        if (direction == 1) {
+
+            for (int i = startValue; i < arry.length; i++) {
+
+
+                if (arry[i] != player) {
+                    counter++;
+                } else {
+                    hasSame = true;
+                    break;
+                }
+            }
+        }
+
+        //if the direction is left or up
+        else {
+            for (int i = startValue; i >= 0; i--) {
+                if (arry[i] != player) {
+                    counter++;
+                } else {
+                    hasSame = true;
+                    break;
+                }
+            }
+        }
+
+
+        if (hasSame)
+            return counter;
+
+        //returns 0 if there is no endpoint
+        return 0;
+    }
+
+
+    public void assignValues(ArrayList<Coordinate> moves, int[][] board) {
+
+        int playerValue = playerOne? 1:-1;
+
+        for (Coordinate c : moves) {
+            //check possible perpendicular values
+
+            //checks to the right
+            int rightPoints = hasPerpandicular(board[c.x], c.x, 1, playerValue);
+
+            //checks to the left
+            int leftPoints = hasPerpandicular(board[c.x], c.x, -1, playerValue);
+
+            //checks down
+            int downPoints = hasPerpandicular(board[c.y], c.y, 1, playerValue);
+
+            //checks up
+            int upPoints = hasPerpandicular(board[c.y], c.y, -1, playerValue);
+
+
+            //check Diagonal
+
+
+            //assign to c
+            int[] values = {rightPoints, leftPoints, downPoints, upPoints};
+            c.value = maxValue(values);
+        }
+    }
+
 
     public int[] returnBestPosition(int[][] board) {
         int best = 0;
@@ -101,19 +175,34 @@ public class AI {
         return position;
     }
 
+    private int maxValue(int[] values){
+        int max = 0;
+
+        for(int i = 0; i < values.length; i++){
+            if(values[i] > max)
+                max = values[i];
+        }
+
+        return max;
+    }
+
 }
 
 class Coordinate {
     protected int x, y;
 
+    protected int value;
+
     public Coordinate() {
         this.x = -1;
         this.y = -1;
+        this.value = 0;
     }
 
     public Coordinate(int x, int y) {
         this.x = x;
         this.y = y;
+        this.value = 0;
     }
 
     public int[] getSpot() {
