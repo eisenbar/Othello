@@ -16,7 +16,7 @@ public class AI {
 
     public int[] computeMove(GameState state) {
 
-        playerOne = state.getPlayer() == 1 ? true : false;
+        playerOne = state.getPlayer() == 1;
 
 
         System.out.println("AI returning canned move for game state - " + state);
@@ -28,6 +28,26 @@ public class AI {
 
 
         //TODO: Select best move for player (high/low)
+        int[] bestMove = new int[2];
+        bestMove[0] = -1;
+        bestMove[1] = -1;
+        bestMove = getBestPosition(moves);
+
+        //for testing purposes
+        System.out.println("THIS IS THE BEST MOVE: " + bestMove);
+
+
+       int[][] newBoard = state.getBoard();
+
+        if(playerOne){
+            newBoard[bestMove[0]][bestMove[1]] = 1;
+        }
+        else{
+            newBoard[bestMove[0]][bestMove[1]] = 2;
+        }
+
+        moveList = Arrays.asList(newBoard).listIterator();
+
         return moveList.next();
     }
 
@@ -177,7 +197,7 @@ public class AI {
     }
 
 
-    public int[] returnBestPosition(ArrayList<Coordinate> board) {
+    public int[] getBestPosition(ArrayList<Coordinate> board) {
         int best = 0;
         int[] position = new int[2];
 
