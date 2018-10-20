@@ -46,37 +46,38 @@ public class AI {
 
                     //checks perpendicular moves
                     if (i != 0 && board[i - 1][j] == 0) {
-                        moves.add(new Coordinate(i - 1, j));
+                        moves.add(new Coordinate(i - 1, j, 0));
                         nLeft = true;
                     }
 
                     if (i != board.length - 1 && board[i + 1][j] == 0) {
-                        moves.add(new Coordinate((i + 1), j));
+                        moves.add(new Coordinate((i + 1), j, 1));
                         nRight = true;
                     }
 
-                    if (j != 0 && board[i][j - 1] == 0) {
-                        moves.add(new Coordinate(i, j - 1));
-                        nTop = true;
-                    }
 
                     if (j != board[i].length - 1 && board[i][j + 1] == 0) {
-                        moves.add(new Coordinate(i, j + 1));
+                        moves.add(new Coordinate(i, j + 1, 2));
                         nBottom = true;
+                    }
+
+                    if (j != 0 && board[i][j - 1] == 0) {
+                        moves.add(new Coordinate(i, j - 1, 3));
+                        nTop = true;
                     }
 
                     //Checks diagonal moves
                     if (nLeft && nTop && board[i - 1][j - 1] == 0)
-                        moves.add(new Coordinate(i - 1, j - 1));
+                        moves.add(new Coordinate(i - 1, j - 1, 4));
 
                     if (nLeft && nBottom && board[i - 1][j + 1] == 0)
-                        moves.add(new Coordinate(i - 1, j + 1));
+                        moves.add(new Coordinate(i - 1, j + 1, 5));
 
                     if (nRight && nTop && board[i + 1][j - 1] == 0)
-                        moves.add(new Coordinate(i + 1, j - 1));
+                        moves.add(new Coordinate(i + 1, j - 1, 6));
 
                     if (nRight && nBottom && board[i + 1][j + 1] == 0)
-                        moves.add(new Coordinate(i + 1, j + 1));
+                        moves.add(new Coordinate(i + 1, j + 1, 7));
                 }
             }
         }
@@ -127,30 +128,51 @@ public class AI {
 
     public void assignValues(ArrayList<Coordinate> moves, int[][] board) {
 
-        int playerValue = playerOne? 1:-1;
+        int playerValue = playerOne ? 1 : -1;
 
         for (Coordinate c : moves) {
             //check possible perpendicular values
+            int rightPoints = -1;
+            int leftPoints = -1;
+            int downPoints = -1;
+            int upPoints = -1;
 
-            //checks to the right
-            int rightPoints = hasPerpandicular(board[c.x], c.x, 1, playerValue);
+            int value = 0;
 
-            //checks to the left
-            int leftPoints = hasPerpandicular(board[c.x], c.x, -1, playerValue);
+            switch (c.direction) {
 
-            //checks down
-            int downPoints = hasPerpandicular(board[c.y], c.y, 1, playerValue);
+                //checks to the right
+                case 0:
+                    value = hasPerpandicular(board[c.x], c.x, 1, playerValue);
+                    break;
 
-            //checks up
-            int upPoints = hasPerpandicular(board[c.y], c.y, -1, playerValue);
+                //checks to the left
+                case 1:
+                    value = hasPerpandicular(board[c.x], c.x, -1, playerValue);
+                    break;
 
+                //checks down
+                case 2:
+                    value = hasPerpandicular(board[c.y], c.y, 1, playerValue);
+                    break;
 
-            //check Diagonal
+                //checks up
+                case 3:
+                    value = hasPerpandicular(board[c.y], c.y, -1, playerValue);
+                    break;
 
-
+                //check Diagonal
+                /*int upLeft;
+                int downLeft;
+                int upRight;
+                int downRight;
+                */
+            }
             //assign to c
-            int[] values = {rightPoints, leftPoints, downPoints, upPoints};
-            c.value = maxValue(values);
+
+            c.value = value;
+
+
         }
     }
 
@@ -170,11 +192,11 @@ public class AI {
         return position;
     }
 
-    private int maxValue(int[] values){
+    private int maxValue(int[] values) {
         int max = 0;
 
-        for(int i = 0; i < values.length; i++){
-            if(values[i] > max)
+        for (int i = 0; i < values.length; i++) {
+            if (values[i] > max)
                 max = values[i];
         }
 
@@ -188,15 +210,19 @@ class Coordinate {
 
     protected int value;
 
+    //right -> 0, left -> 1; down -> 2; up -> 3; upLeft = 4; downLeft = 5; upRight = 6; downRight = 7;
+    int direction;
+
     public Coordinate() {
         this.x = -1;
         this.y = -1;
         this.value = 0;
     }
 
-    public Coordinate(int x, int y) {
+    public Coordinate(int x, int y, int direction) {
         this.x = x;
         this.y = y;
+        this.direction = direction;
         this.value = 0;
     }
 
