@@ -33,4 +33,36 @@ class Coordinates{
         this.x = x;
         this.y = y;
     }
+    
+    //Call on these to change coordinates
+    public void moveUp(){
+    	this.y--;
+    }
+    
+    public void moveDown(){
+    	this.y++;
+    }
+    
+    public void moveLeft(){
+    	this.x--;
+    }
+    public void moveRight(){
+    	this.x++;
+    }
+    public void moveUpRight(){
+    	this.y--;
+    	this.x++;
+    }
+    public void moveUpLeft(){
+    	this.y--;
+    	this.x--;
+    }
+    public void moveDownLeft(){
+    	this.y++;
+    	this.x++;
+    }
+    public void moveDownRight(){
+    	this.y++;
+    	this.x--;
+    }
 }
