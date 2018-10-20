@@ -1,17 +1,20 @@
 package com.atomicobject.othello;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.ListIterator;
 
 public class AI {
-	
-	ListIterator<int[]> moveList;
 
-	public AI(int[][] moves) {
-		moveList = Arrays.asList(moves).listIterator();
-	}
+    ListIterator<int[]> moveList;
 
-	 public int[] computeMove(GameState state) {
+    private boolean playerOne;
+
+    public AI(int[][] moves) {
+        moveList = Arrays.asList(moves).listIterator();
+    }
+
+    public int[] computeMove(GameState state) {
 
         playerOne = state.getPlayer() == 1 ? true : false;
 
@@ -21,38 +24,56 @@ public class AI {
         //AI
         ArrayList<Coordinate> moves = possibleMoves(state.getBoard());
 
+        //TODO: Select best move for player (high/low)
         return moveList.next();
     }
 
-    public ArrayList<Coordinate> possibleMoves(int[][] board) {
+    private ArrayList<Coordinate> possibleMoves(int[][] board) {
 
         ArrayList<Coordinate> moves = new ArrayList<Coordinate>();
 
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
-                if (board[i][j] == 1) {
-                    if (playerOne) {
 
-                        //Checks to see if the spot is open
-                        if (board[i][j] == 0) {
+                //Checks to see if the spot is a
+                if (board[i][j] == 1 && playerOne || board[i][j] == 2 && !playerOne) {
 
-                            //TODO: Add a method that determins if a friendly piece is adjacent
+                    boolean nLeft = false, nRight = false, nTop = false, nBottom = false;
+                    //Makes sure spot doesn't try to add an out of bounds piece
 
-                            //Makes sure spot doesn't try to add an out of bounds piece
-                            if (i != 0)
-                                moves.add(new Coordinate(i - 1, j));
-
-                            if (i != board.length - 1)
-                                moves.add(new Coordinate((i + 1), j));
-
-                            if (j != 0)
-                                moves.add(new Coordinate(i, j - 1));
-
-                            if (j != board[i].length - 1)
-                                moves.add(new Coordinate(i, j + 1));
-
-                        }
+                    //checks perpendicular moves
+                    if (i != 0 && board[i - 1][j] == 0) {
+                        moves.add(new Coordinate(i - 1, j));
+                        nLeft = true;
                     }
+
+                    if (i != board.length - 1 && board[i + 1][j] == 0) {
+                        moves.add(new Coordinate((i + 1), j));
+                        nRight = true;
+                    }
+
+                    if (j != 0 && board[i][j - 1] == 0) {
+                        moves.add(new Coordinate(i, j - 1));
+                        nTop = true;
+                    }
+
+                    if (j != board[i].length - 1 && board[i][j + 1] == 0) {
+                        moves.add(new Coordinate(i, j + 1));
+                        nBottom = true;
+                    }
+
+                    //Checks diagonal moves
+                    if (nLeft && nTop && board[i - 1][j - 1] == 0)
+                        moves.add(new Coordinate(i - 1, j - 1));
+                    
+                    if (nLeft && nBottom && board[i - 1][j + 1] == 0)
+                        moves.add(new Coordinate(i - 1, j + 1));
+                    
+                    if (nRight && nTop && board[i + 1][j - 1] == 0)
+                        moves.add(new Coordinate(i + 1, j - 1));
+                    
+                    if (nRight && nBottom && board[i + 1][j + 1] == 0)
+                        moves.add(new Coordinate(i + 1, j + 1));
                 }
             }
         }
@@ -62,48 +83,59 @@ public class AI {
 
 }
 
-class Coordinates{
+class Coordinate {
     protected int x, y;
 
-    public Coordinates(){
+    public Coordinate() {
         this.x = -1;
         this.y = -1;
     }
 
-    public Coordinates(int x, int y){
+    public Coordinate(int x, int y) {
         this.x = x;
         this.y = y;
     }
-    
+
+    public int[] getSpot() {
+        int[] rtn = {x, y};
+        return rtn;
+    }
+
     //Call on these to change coordinates
-    public void moveUp(){
-    	this.y--;
+    public void moveUp() {
+        this.y--;
     }
-    
-    public void moveDown(){
-    	this.y++;
+
+    public void moveDown() {
+        this.y++;
     }
-    
-    public void moveLeft(){
-    	this.x--;
+
+    public void moveLeft() {
+        this.x--;
     }
-    public void moveRight(){
-    	this.x++;
+
+    public void moveRight() {
+        this.x++;
     }
-    public void moveUpRight(){
-    	this.y--;
-    	this.x++;
+
+    public void moveUpRight() {
+        this.y--;
+        this.x++;
     }
-    public void moveUpLeft(){
-    	this.y--;
-    	this.x--;
+
+    public void moveUpLeft() {
+        this.y--;
+        this.x--;
     }
-    public void moveDownLeft(){
-    	this.y++;
-    	this.x++;
+
+    public void moveDownLeft() {
+        this.y++;
+        this.x++;
     }
-    public void moveDownRight(){
-    	this.y++;
-    	this.x--;
+
+    public void moveDownRight() {
+        this.y++;
+        this.x--;
     }
 }
+
