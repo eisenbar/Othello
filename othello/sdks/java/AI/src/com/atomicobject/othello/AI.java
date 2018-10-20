@@ -34,7 +34,7 @@ public class AI {
         bestMove = getBestPosition(moves);
 
         //for testing purposes
-        System.out.println("TEST: this is the best move: " + bestMove);
+        System.out.println("TEST: this is the best move: " + bestMove[0] + bestMove[1]);
 
         //creating new board after our move
        int[][] newBoard = state.getBoard();
@@ -67,22 +67,26 @@ public class AI {
                     //checks perpendicular moves
                     if (i != 0 && board[i - 1][j] == 0) {
                         moves.add(new Coordinate(i - 1, j, 0));
+                        System.out.println(moves.get(moves.size() - 1).x  + " " + moves.get(moves.size() - 1).y + " is a valid move");
                         nLeft = true;
                     }
 
                     if (i != board.length - 1 && board[i + 1][j] == 0) {
                         moves.add(new Coordinate((i + 1), j, 1));
+                        System.out.println(moves.get(moves.size() - 1).x + " "+ moves.get(moves.size() - 1).y + " is a valid move");
                         nRight = true;
                     }
 
 
                     if (j != board[i].length - 1 && board[i][j + 1] == 0) {
                         moves.add(new Coordinate(i, j + 1, 2));
+                        System.out.println(moves.get(moves.size() - 1).x + " "+ moves.get(moves.size() - 1).y + " is a valid move");
                         nBottom = true;
                     }
 
                     if (j != 0 && board[i][j - 1] == 0) {
                         moves.add(new Coordinate(i, j - 1, 3));
+                        System.out.println(moves.get(moves.size() - 1).x + " "+ moves.get(moves.size() - 1).y + " is a valid move");
                         nTop = true;
                     }
 
@@ -187,9 +191,11 @@ public class AI {
                 int upRight;
                 int downRight;
                 */
+
+
             }
             //assign to c
-
+            System.out.println(value);
             c.value = value;
 
 
@@ -203,10 +209,12 @@ public class AI {
 
         //iterate through given coordinates
         for (int i = 0; i < board.size(); i++) {
-            if (board.get(i).value > best)
+            if (board.get(i).value > best) {
                 best = board.get(i).value;
-            position[0] = board.get(i).x;
-            position[1] = board.get(i).y;
+                position[0] = board.get(i).x;
+                position[1] = board.get(i).y;
+                System.out.println("Position " + board.get(i).x + "," + board.get(i).y + "  " + board.get(i).value);
+            }
         }
 
         return position;
