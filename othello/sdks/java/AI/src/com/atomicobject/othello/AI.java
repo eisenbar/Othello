@@ -34,7 +34,7 @@ public class AI {
         bestMove = getBestPosition(moves);
 
         //for testing purposes
-        System.out.println("TEST: this is the best move: " + bestMove[0] + bestMove[1]);
+        //System.out.println("TEST: this is the best move: " + bestMove[0] + bestMove[1]);
 
         //creating new board after our move
        int[][] newBoard = state.getBoard();
@@ -67,26 +67,22 @@ public class AI {
                     //checks perpendicular moves
                     if (i != 0 && board[i - 1][j] == 0) {
                         moves.add(new Coordinate(i - 1, j, 0));
-                        System.out.println(moves.get(moves.size() - 1).x  + " " + moves.get(moves.size() - 1).y + " is a valid move");
                         nLeft = true;
                     }
 
                     if (i != board.length - 1 && board[i + 1][j] == 0) {
                         moves.add(new Coordinate((i + 1), j, 1));
-                        System.out.println(moves.get(moves.size() - 1).x + " "+ moves.get(moves.size() - 1).y + " is a valid move");
                         nRight = true;
                     }
 
 
                     if (j != board[i].length - 1 && board[i][j + 1] == 0) {
                         moves.add(new Coordinate(i, j + 1, 2));
-                        System.out.println(moves.get(moves.size() - 1).x + " "+ moves.get(moves.size() - 1).y + " is a valid move");
                         nBottom = true;
                     }
 
                     if (j != 0 && board[i][j - 1] == 0) {
                         moves.add(new Coordinate(i, j - 1, 3));
-                        System.out.println(moves.get(moves.size() - 1).x + " "+ moves.get(moves.size() - 1).y + " is a valid move");
                         nTop = true;
                     }
 
@@ -161,28 +157,34 @@ public class AI {
             int downPoints = -1;
             int upPoints = -1;
 
-            int value = 0;
+            int value = 1;
 
             switch (c.direction) {
 
                 //checks to the right
                 case 0:
-                    value = hasPerpandicular(board[c.x], c.x, 1, playerValue);
+                    System.out.println("Coord " + c.x + "," + c.y);
+                    value += hasPerpandicular(board[c.x], c.x, 1, playerValue);
                     break;
 
                 //checks to the left
                 case 1:
-                    value = hasPerpandicular(board[c.x], c.x, -1, playerValue);
+                    System.out.println("Coord " + c.x + "," + c.y);
+                    value += hasPerpandicular(board[c.x], c.x, -1, playerValue);
                     break;
 
                 //checks down
                 case 2:
-                    value = hasPerpandicular(board[c.y], c.y, 1, playerValue);
+                    System.out.println("Coord " + c.x + "," + c.y);
+                    int[] col = getColumn(board, c.y);
+                    value += hasPerpandicular(col, c.y, 1, playerValue);
                     break;
 
                 //checks up
                 case 3:
-                    value = hasPerpandicular(board[c.y], c.y, -1, playerValue);
+                    System.out.println("Coord " + c.x + "," + c.y);
+                    int[] col2 = getColumn(board, c.y);
+                    value += hasPerpandicular(col2, c.y, -1, playerValue);
                     break;
 
                 //check Diagonal
@@ -194,12 +196,18 @@ public class AI {
 
 
             }
-            //assign to c
-            System.out.println(value);
             c.value = value;
-
-
         }
+    }
+
+    private int[] getColumn(int[][] data, int c){
+        int[] rtn = new int[data.length];
+
+        for(int i = 0; i < rtn.length; i++){
+            rtn[i] = data[i][c];
+        }
+
+        return rtn;
     }
 
 
