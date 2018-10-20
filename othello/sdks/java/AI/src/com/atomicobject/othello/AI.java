@@ -155,21 +155,16 @@ public class AI {
     }
 
 
-    public int[] returnBestPosition(int[][] board) {
+    public int[] returnBestPosition(ArrayList<Coordinate> board) {
         int best = 0;
         int[] position = new int[2];
-        position[0] = 0;
-        position[1] = 0;
 
-        //call possible moves function
-        ArrayList<Coordinate> possible = possibleMoves(board);
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[i].length; j++) {
-                if (possible[i][j] > best)
-                    best = possible[i][j];
-                position[0] = i;
-                position[1] = j;
-            }
+        //iterate through given coordinates
+        for (int i = 0; i < board.size(); i++) {
+            if (board.get(i).value > best)
+                best = board.get(i).value;
+            position[0] = board.get(i).x;
+            position[1] = board.get(i).y;
         }
 
         return position;
